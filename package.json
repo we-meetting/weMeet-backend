@@ -71,5 +71,14 @@
     ],
     "coverageDirectory": "../coverage",
     "testEnvironment": "node"
+  },
+  "lint-staged": {
+    "**/*.ts": [
+      "yarn lint",
+      "yarn format"
+    ],
+    "**/*.prisma": [
+      "prisma format"
+    ]
   }
 }
