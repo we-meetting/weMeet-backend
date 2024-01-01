@@ -11,24 +11,22 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: [18.x]
 
     steps:
       - uses: actions/checkout@v3
 
-      - name: Set up Node.js ${{ matrix.node-version }}
+      - name: Set up Node.js 18
         uses: actions/setup-node@v3
         with:
-          cache: npm
-          node-version: ${{ matrix.node-version }}
+          cache: pnpm
+          node-version: 18
+          cache-dependency-path: ./pnpm-lock.yaml
 
       - name: Install dependencies
-        run: npm install --frozen-lockfile
+        run: pnpm install --frozen-lockfile
 
       - name: Generate prisma/client
         run: npx prisma generate
 
       - name: Build
-        run: npm build
+        run: pnpm build
