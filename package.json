@@ -1,8 +1,9 @@
 {
   "name": "we-meet-backend",
+  "repository": "https://github.com/we-meetting",
   "version": "0.0.1",
   "description": "",
-  "author": "",
+  "author": "GeunWon Choi <kidjustinchoi@gmail.com>",
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
@@ -47,6 +48,7 @@
     "@typescript-eslint/parser": "^6.0.0",
     "eslint": "^8.42.0",
     "eslint-config-prettier": "^9.0.0",
+    "eslint-plugin-import": "^2.29.1",
     "eslint-plugin-prettier": "^5.0.0",
     "husky": "^8.0.0",
     "jest": "^29.5.0",
@@ -85,5 +87,6 @@
     "**/*.prisma": [
       "prisma format"
     ]
-  }
+  },
+  "main": "index.js"
 }

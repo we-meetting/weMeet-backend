@@ -1,9 +1,12 @@
 import { Module } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
+
+import * as Joi from 'joi';
+
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { PrismaService } from './prisma.service';
-import { ConfigModule } from '@nestjs/config';
-import * as Joi from 'joi';
+import { PrismaService } from './common/prisma/prisma.service';
+import { UserController } from './user/user.controller';
 
 @Module({
   imports: [
@@ -15,7 +18,7 @@ import * as Joi from 'joi';
       }),
     }),
   ],
-  controllers: [AppController],
+  controllers: [AppController, UserController],
   providers: [AppService, PrismaService],
 })
 export class AppModule {}
