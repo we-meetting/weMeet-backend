@@ -21,7 +21,7 @@
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "prepare": "husky install",
     "prisma:init": "prisma db pull && prisma generate",
-    "prisma:fix": "npx prisma db push"
+    "prisma:push": "npx prisma db push"
   },
   "dependencies": {
     "@nestjs/common": "^10.0.0",

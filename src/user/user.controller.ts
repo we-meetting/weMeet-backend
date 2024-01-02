@@ -12,4 +12,10 @@ export class UserController {
   async createUser(@Body() body: CreateUserDto) {
     return await this.userService.createUser(body);
   }
+
+  @Post('/get-info')
+  @HttpCode(HttpStatus.OK)
+  async findUserById(@Body('id') id: string) {
+    return await this.userService.findUserById(id);
+  }
 }
