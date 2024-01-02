@@ -1,4 +1,4 @@
-import { Body, Controller, HttpCode, HttpStatus, Post } from '@nestjs/common';
+import { Body, Controller, Delete, HttpCode, HttpStatus, Patch, Post } from '@nestjs/common';
 
 import { CreateUserDto } from './dto/create-user.dto';
 import { UserService } from './user.service';
@@ -17,5 +17,17 @@ export class UserController {
   @HttpCode(HttpStatus.OK)
   async findUserById(@Body('id') id: string) {
     return await this.userService.findUserById(id);
+  }
+
+  @Patch('/update-name')
+  @HttpCode(HttpStatus.OK)
+  async updateUserName(@Body('id') id: string, @Body('name') name: string) {
+    return await this.userService.updateUserName(id, { name });
+  }
+
+  @Delete('/delete')
+  @HttpCode(HttpStatus.OK)
+  async deleteUser(@Body('id') id: string) {
+    return await this.userService.deleteUser(id);
   }
 }
