@@ -7,6 +7,8 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { PrismaService } from './common/prisma/prisma.service';
 import { UserController } from './user/user.controller';
+import { UserModule } from './user/user.module';
+import { UserService } from './user/user.service';
 
 @Module({
   imports: [
@@ -17,8 +19,9 @@ import { UserController } from './user/user.controller';
         DATABASE_URL: Joi.string().required(),
       }),
     }),
+    UserModule,
   ],
   controllers: [AppController, UserController],
-  providers: [AppService, PrismaService],
+  providers: [AppService, PrismaService, UserService],
 })
 export class AppModule {}

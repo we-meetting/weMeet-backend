@@ -21,14 +21,16 @@ jobs:
       - name: Set up Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v3
         with:
-          cache: "yarn"
           node-version: ${{ matrix.node-version }}
+      
+      - name: Install Pnpm
+        run: npm install -g pnpm
 
       - name: Install dependencies
-        run: yarn install 
+        run: pnpm install 
 
       - name: Generate prisma/client
-        run: yarn prisma generate
+        run: npx prisma generate
 
       - name: Build
-        run: yarn build
+        run: pnpm build
