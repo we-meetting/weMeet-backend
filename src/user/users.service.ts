@@ -1,35 +1,48 @@
 import { Injectable } from '@nestjs/common';
 
 import { User } from '@prisma/client';
+import { SignUpDto } from 'src/auth/dto/sign-up.dto';
 import { PrismaService } from 'src/common/prisma';
 
-import { CreateUserDto } from './dto/create-user.dto';
-
-const selectOptions = {
-  id: true,
-  name: true,
-  email: true,
-  role: true,
-  createdAt: true,
-  updatedAt: true,
-};
-
 @Injectable()
-export class UserService {
-  constructor(private readonly prismaService: PrismaService) {}
+export class UsersService {
+  private selectOptions: {
+    id: boolean;
+    name: boolean;
+    email: boolean;
+    role: boolean;
+  };
+  constructor(private readonly prismaService: PrismaService) {
+    this.selectOptions = {
+      id: true,
+      name: true,
+      email: true,
+      role: true,
+    };
+  }
 
-  public async createUser({ name, email, password }: CreateUserDto) {
+  public async isExitsUser({ email }: { email: string }) {
+    const user = await this.prismaService.user.findFirst({
+      where: { email },
+    });
+    console.log(user, 'exits User');
+    return { isExist: user != null, user: user || null };
+  }
+
+  public async createUser({ name, email, password }: SignUpDto) {
+    console.log({ name, email, password }, 'asdf');
     return await this.prismaService.user.create({
       data: { name, email, password },
-      select: selectOptions,
+      select: this.selectOptions,
     });
   }
 
   public async findUserById(id: string) {
-    return await this.prismaService.user.findUnique({
+    const user = await this.prismaService.user.findFirst({
       where: { id },
-      select: selectOptions,
     });
+    console.log(user, 'exits User');
+    return { isExist: Boolean(user), user: user || null };
   }
 
   public async updateUserName(id: User['id'], data: Partial<Pick<User, 'name'>>): Promise<boolean> {
