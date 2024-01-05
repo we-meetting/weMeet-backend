@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 
 import { User } from '@prisma/client';
+
 import { SignUpDto } from 'src/auth/dto/sign-up.dto';
 import { PrismaService } from 'src/common/prisma';
 
@@ -25,12 +26,10 @@ export class UsersService {
     const user = await this.prismaService.user.findFirst({
       where: { email },
     });
-    console.log(user, 'exits User');
     return { isExist: user != null, user: user || null };
   }
 
   public async createUser({ name, email, password }: SignUpDto) {
-    console.log({ name, email, password }, 'asdf');
     return await this.prismaService.user.create({
       data: { name, email, password },
       select: this.selectOptions,
@@ -41,7 +40,6 @@ export class UsersService {
     const user = await this.prismaService.user.findFirst({
       where: { id },
     });
-    console.log(user, 'exits User');
     return { isExist: Boolean(user), user: user || null };
   }
 

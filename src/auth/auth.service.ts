@@ -2,8 +2,8 @@ import { ConflictException, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 
-import { Role } from '@prisma/client';
 import * as bcrypt from 'bcrypt';
+
 import { UsersService } from 'src/user/users.service';
 
 import { SignInDto, SignUpDto } from './dto';
@@ -41,31 +41,9 @@ export class AuthService {
     const isCorrectPassword = await bcrypt.compare(password, user.password);
     if (!isCorrectPassword) throw new ConflictException('이메일/비밀번호를 다시 확인해주세요');
 
-    const accessToken = this.issueJwtToken({ sub: user.id, role: user.role }, true);
-    const refreshToken = this.issueJwtToken({ sub: user.id, role: user.role }, false);
-    const isProduction = this.configService.get<string>('NODE_ENV') !== 'dev';
+    const secertKey = this.configService.get<string>('JWT_SECRET_KEY');
+    const jwtToken = this.jwtService.sign({ id: user.id, role: user.role }, { secret: secertKey });
 
-    return {
-      accessToken,
-      refreshToken,
-      refreshCookieOptions: {
-        domain: isProduction ? 'localhost' : 'localhost',
-        maxAge: 24 * 60 * 60 * 1000,
-        httpOnly: true,
-        secure: isProduction,
-      },
-    };
-  }
-
-  public issueJwtToken(payload: { sub: string; role: Role }, isAccessToken: boolean) {
-    const accessSecret = this.configService.getOrThrow<string>('JWT_ACCESS_SECRET');
-    const refreshSecret = this.configService.getOrThrow<string>('JWT_REFRESH_SECRET');
-
-    const token = this.jwtService.sign(payload, {
-      secret: isAccessToken ? accessSecret : refreshSecret,
-      expiresIn: isAccessToken ? '2h' : '1d',
-    });
-
-    return token;
+    return { token: jwtToken };
   }
 }

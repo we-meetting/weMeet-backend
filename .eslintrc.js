@@ -31,6 +31,11 @@ module.exports = {
             group: 'external',
             position: 'before',
           },
+          {
+            pattern: 'src/**',
+            group: 'internal',
+            position: 'after',
+          }
         ],
         pathGroupsExcludedImportTypes: ['@nestjs'],
         'newlines-between': 'always',
