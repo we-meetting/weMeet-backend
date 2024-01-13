@@ -1,4 +1,15 @@
-import { Body, Controller, HttpCode, HttpStatus, Post, Res, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  HttpCode,
+  HttpStatus,
+  Patch,
+  Post,
+  Res,
+  UseGuards,
+} from '@nestjs/common';
 
 import { ClientIp } from '@common/decorators/client-ip.decorator';
 import { User } from '@prisma/client';
@@ -6,6 +17,7 @@ import { Response } from 'express';
 
 import { AuthService } from './auth.service';
 import { GetUser, Role } from './decorators';
+import { UpdateUserNameDto } from './dto';
 import { SignUpDto } from './dto/sign-up.dto';
 import { JwtAccessGuard, JwtRefreshGuard, LocalAuthGuard, RoleGuard } from './guards';
 
@@ -21,8 +33,7 @@ export class AuthController {
   }
 
   @Post('login')
-  @UseGuards(LocalAuthGuard, RoleGuard)
-  @Role(['ANY'])
+  @UseGuards(LocalAuthGuard)
   async signIn(
     @Res({ passthrough: true }) res: Response,
     @GetUser() user: User,
@@ -38,7 +49,7 @@ export class AuthController {
 
   @Post('silent')
   @UseGuards(JwtRefreshGuard, RoleGuard)
-  @Role(['USER'])
+  @Role(['ANY'])
   async slient(
     @Res({ passthrough: true }) res: Response,
     @GetUser() user: User,
@@ -50,5 +61,28 @@ export class AuthController {
     res.cookie('token', refreshToken, refreshCookieOption);
 
     return { accessToken };
+  }
+
+  @Get('@me')
+  @UseGuards(JwtAccessGuard, RoleGuard)
+  @Role(['ANY'])
+  async getMe(@GetUser() user: User) {
+    return this.authService.formatUser(user);
+  }
+
+  @Patch('@me')
+  @UseGuards(JwtAccessGuard, RoleGuard)
+  @Role(['ANY'])
+  async updateUsername(@GetUser() user: User, @Body() updateUserNameDto: UpdateUserNameDto) {
+    await this.authService.updateUsername(user.id, updateUserNameDto);
+    return;
+  }
+
+  @Delete('@me')
+  @UseGuards(JwtAccessGuard, RoleGuard)
+  @Role(['ANY'])
+  async leave(@GetUser() user: User) {
+    await this.authService.leave(user.id);
+    return;
   }
 }

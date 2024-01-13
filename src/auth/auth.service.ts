@@ -1,14 +1,18 @@
-import { ConflictException, Injectable } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 
-import { PrismaService } from '@common/prisma';
 import { User } from '@prisma/client';
 import * as bcrypt from 'bcrypt';
 
 import { UsersService } from 'src/users/users.service';
 
-import { SignInDto, SignUpDto } from './dto';
+import { SignInDto, SignUpDto, UpdateUserNameDto } from './dto';
 
 @Injectable()
 export class AuthService {
@@ -17,14 +21,13 @@ export class AuthService {
     private readonly usersService: UsersService,
     private readonly configService: ConfigService,
     private readonly jwtService: JwtService,
-    private readonly prismaService: PrismaService,
   ) {
     this.bycryptNumber = 10;
   }
 
   public async signUp({ email, password, name }: SignUpDto) {
     const { isExist: exitsUser } = await this.usersService.isExitsUser({ email });
-    if (exitsUser) throw new ConflictException('이미 존재하는 이메일입니다.');
+    if (exitsUser) throw new ConflictException('이미 존재하는 이메일이에요');
 
     const hashedPassword = await bcrypt.hash(password, this.bycryptNumber);
 
@@ -39,23 +42,18 @@ export class AuthService {
 
   public async signIn({ email, password }: SignInDto) {
     const { isExist: exitsUser, user } = await this.usersService.isExitsUser({ email });
-    if (!exitsUser) throw new ConflictException('이메일/비밀번호를 다시 확인해주세요');
+    if (!exitsUser) throw new UnauthorizedException('이메일/비밀번호를 다시 확인해주세요');
 
     const isCorrectPassword = await bcrypt.compare(password, user.password);
-    if (!isCorrectPassword) throw new ConflictException('이메일/비밀번호를 다시 확인해주세요');
+    if (!isCorrectPassword) throw new UnauthorizedException('이메일/비밀번호를 다시 확인해주세요');
 
-    const updateRoleUser = await this.prismaService.user.update({
-      where: { id: user.id },
-      data: { role: 'USER' },
-    });
-
-    return updateRoleUser;
+    return user;
   }
 
   public async updateLastLoginIp(id: User['id'], ip: string) {
-    await this.prismaService.user.update({
-      where: { id },
-      data: { lastLoginIp: ip, lastLoginAt: new Date() },
+    await this.usersService.updateUser(id, {
+      lastLoginIp: ip,
+      lastLoginAt: new Date(),
     });
 
     return;
@@ -88,5 +86,27 @@ export class AuthService {
     });
 
     return token;
+  }
+
+  public formatUser(user: User) {
+    delete user.password;
+
+    return user;
+  }
+
+  public async updateUsername(id: User['id'], { name }: UpdateUserNameDto) {
+    const { isExist, user } = await this.usersService.findById(id);
+    if (!isExist) throw new NotFoundException('존재하지 않는 유저에요');
+
+    await this.usersService.updateUser(user.id, { name });
+    return;
+  }
+
+  public async leave(id: User['id']) {
+    const { isExist, user } = await this.usersService.findById(id);
+    if (!isExist) throw new NotFoundException('존재하지 않는 유저에요');
+
+    await this.usersService.deleteUser(user.id);
+    return;
   }
 }

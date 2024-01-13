@@ -23,7 +23,7 @@ export class JwtAccessStrategy extends PassportStrategy(Strategy, 'jwt-access') 
   async validate(payload: { sub: string }) {
     console.log(request.cookies, 'cookie');
     const { isExist, user } = await this.usersService.findById(payload.sub);
-    if (!isExist) throw new UnauthorizedException('사용자를 불러오는데 실패했어요.');
+    if (!isExist) throw new UnauthorizedException('사용자 정보를 불러오는데 실패했어요');
 
     return user;
   }

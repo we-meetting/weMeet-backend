@@ -14,7 +14,6 @@ export class RoleGuard implements CanActivate {
     const roles = this.reflector.get<AllowedRoles[]>('roles', context.getHandler());
 
     if (!roles || roles.includes('ANY')) {
-      // roles가 아니면 true를 리턴하고 진행한다.
       return true;
     }
 

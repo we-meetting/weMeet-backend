@@ -2,4 +2,4 @@
 export const PASSWORD_REGEX = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{8,}$/;
 
 // 한글 2~4자 허용
-export const NAME_REGEX = /^[가-힣]{2,4}/;
+export const NAME_REGEX = /^[가-힣]{2,4}$/;
