@@ -1,10 +1,14 @@
-import { Body, Controller, HttpCode, HttpStatus, Post, Res } from '@nestjs/common';
+import { Body, Controller, HttpCode, HttpStatus, Post, Res, UseGuards } from '@nestjs/common';
 
+import { ClientIp } from '@common/decorators/client-ip.decorator';
+import { User } from '@prisma/client';
 import { Response } from 'express';
 
 import { AuthService } from './auth.service';
-import { SignInDto } from './dto';
+import { GetUser, Role } from './decorators';
 import { SignUpDto } from './dto/sign-up.dto';
+import { LocalAuthGuard } from './guards/local-auth.guard';
+import { RolesGuard } from './guards/role.guard';
 
 @Controller('auth')
 export class AuthController {
@@ -18,8 +22,18 @@ export class AuthController {
   }
 
   @Post('login')
-  async signIn(@Res({ passthrough: true }) res: Response, @Body() singInDto: SignInDto) {
-    const { token } = await this.authService.signIn(singInDto);
-    return { token };
+  @UseGuards(LocalAuthGuard, RolesGuard)
+  @Role(['GUEST'])
+  async signIn(
+    @Res({ passthrough: true }) res: Response,
+    @GetUser() user: User,
+    @ClientIp() clientIp: string,
+  ) {
+    const { accessToken, refreshToken, refreshCookieOption } =
+      await this.authService.issueLoginTokenSet(user);
+    await this.authService.updateLastLoginIp(user.id, clientIp);
+    res.cookie('refreshToken', refreshToken, refreshCookieOption);
+
+    return { accessToken };
   }
 }

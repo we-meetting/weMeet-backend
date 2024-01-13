@@ -12,7 +12,7 @@ import { UserModule } from './user/users.module';
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      envFilePath: process.env.NODE_ENV === 'dev' ? '.env.dev' : '.env',
+      envFilePath: process.env.NODE_ENV === 'prod' ? '.env' : '.env.local',
       validationSchema: Joi.object({
         DATABASE_URL: Joi.string().required(),
       }),

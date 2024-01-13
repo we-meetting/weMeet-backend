@@ -14,12 +14,12 @@ model User {
   email       String    @unique @db.VarChar(255)
   password    String
   name        String    @db.VarChar(4)
-  role        Role      @default(GUEST)
+  role        UserRole      @default(GUEST)
   lastLoginAt DateTime? @map("last_login_at") @db.Timestamp(6)
   lastLoginIp String?   @map("last_login_ip") @db.VarChar(255)
 }
 
-enum Role {
+enum UserRole {
   ADMIN
   USER
   GUEST
