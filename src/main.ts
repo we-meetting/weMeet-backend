@@ -5,6 +5,7 @@ import { NestFactory } from '@nestjs/core';
 
 import { HttpExceptionFilter } from '@common/filters';
 import { ResponseInterceptor } from '@common/interceptors';
+import * as cookieParser from 'cookie-parser';
 import * as dotenv from 'dotenv';
 import * as requestIp from 'request-ip';
 
@@ -23,6 +24,7 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe());
 
   app.use(requestIp.mw());
+  app.use(cookieParser());
 
   await app.listen(3000);
 }

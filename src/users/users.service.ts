@@ -33,7 +33,7 @@ export class UsersService {
     return await this.prismaService.user.create({ data: { name, email, password } });
   }
 
-  public async findUserById(id: string) {
+  public async findById(id: string) {
     const user = await this.prismaService.user.findFirst({
       where: { id },
     });

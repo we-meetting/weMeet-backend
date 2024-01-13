@@ -2,7 +2,7 @@ import { SetMetadata } from '@nestjs/common';
 
 import { UserRole } from '@prisma/client';
 
-export type AllowedRoles = keyof typeof UserRole;
+export type AllowedRoles = keyof typeof UserRole | 'ANY';
 // keyof typeof를 쓰면 value만 가져올 수 있음
 
 /**

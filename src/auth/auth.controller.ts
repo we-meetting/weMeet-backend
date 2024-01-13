@@ -7,8 +7,7 @@ import { Response } from 'express';
 import { AuthService } from './auth.service';
 import { GetUser, Role } from './decorators';
 import { SignUpDto } from './dto/sign-up.dto';
-import { LocalAuthGuard } from './guards/local-auth.guard';
-import { RolesGuard } from './guards/role.guard';
+import { JwtAccessGuard, JwtRefreshGuard, LocalAuthGuard, RoleGuard } from './guards';
 
 @Controller('auth')
 export class AuthController {
@@ -22,8 +21,8 @@ export class AuthController {
   }
 
   @Post('login')
-  @UseGuards(LocalAuthGuard, RolesGuard)
-  @Role(['GUEST'])
+  @UseGuards(LocalAuthGuard, RoleGuard)
+  @Role(['ANY'])
   async signIn(
     @Res({ passthrough: true }) res: Response,
     @GetUser() user: User,
@@ -32,7 +31,23 @@ export class AuthController {
     const { accessToken, refreshToken, refreshCookieOption } =
       await this.authService.issueLoginTokenSet(user);
     await this.authService.updateLastLoginIp(user.id, clientIp);
-    res.cookie('refreshToken', refreshToken, refreshCookieOption);
+    res.cookie('token', refreshToken, refreshCookieOption);
+
+    return { accessToken };
+  }
+
+  @Post('silent')
+  @UseGuards(JwtRefreshGuard, RoleGuard)
+  @Role(['USER'])
+  async slient(
+    @Res({ passthrough: true }) res: Response,
+    @GetUser() user: User,
+    @ClientIp() clientIp: string,
+  ) {
+    const { accessToken, refreshToken, refreshCookieOption } =
+      await this.authService.issueLoginTokenSet(user);
+    await this.authService.updateLastLoginIp(user.id, clientIp);
+    res.cookie('token', refreshToken, refreshCookieOption);
 
     return { accessToken };
   }

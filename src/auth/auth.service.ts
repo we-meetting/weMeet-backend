@@ -6,7 +6,7 @@ import { PrismaService } from '@common/prisma';
 import { User } from '@prisma/client';
 import * as bcrypt from 'bcrypt';
 
-import { UsersService } from 'src/user/users.service';
+import { UsersService } from 'src/users/users.service';
 
 import { SignInDto, SignUpDto } from './dto';
 
@@ -44,7 +44,12 @@ export class AuthService {
     const isCorrectPassword = await bcrypt.compare(password, user.password);
     if (!isCorrectPassword) throw new ConflictException('이메일/비밀번호를 다시 확인해주세요');
 
-    return user;
+    const updateRoleUser = await this.prismaService.user.update({
+      where: { id: user.id },
+      data: { role: 'USER' },
+    });
+
+    return updateRoleUser;
   }
 
   public async updateLastLoginIp(id: User['id'], ip: string) {
@@ -56,9 +61,9 @@ export class AuthService {
     return;
   }
 
-  public async issueLoginTokenSet(user: User) {
-    const accessToken = await this.issueJwtToken({ sub: user.id }, true);
-    const refreshToken = await this.issueJwtToken({ sub: user.id }, false);
+  public issueLoginTokenSet(user: User) {
+    const accessToken = this.issueJwtToken({ sub: user.id }, true);
+    const refreshToken = this.issueJwtToken({ sub: user.id }, false);
     const isProduction = this.configService.get<string>('NODE_ENV') === 'prod';
 
     return {
@@ -73,7 +78,7 @@ export class AuthService {
     };
   }
 
-  public async issueJwtToken(payload: { sub: string }, isAccessToken: boolean) {
+  public issueJwtToken(payload: { sub: string }, isAccessToken: boolean) {
     const accessSecret = this.configService.get<string>('JWT_ACCESS_SECRET');
     const refreshSecret = this.configService.get<string>('JWT_REFRESH_SECRET');
 
