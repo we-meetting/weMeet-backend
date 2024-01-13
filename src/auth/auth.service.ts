@@ -41,7 +41,7 @@ export class AuthService {
     const isCorrectPassword = await bcrypt.compare(password, user.password);
     if (!isCorrectPassword) throw new ConflictException('이메일/비밀번호를 다시 확인해주세요');
 
-    const secertKey = this.configService.get<string>('JWT_SECRET_KEY');
+    const secertKey = this.configService.get<string>('JWT_ACCESS_SECRET');
     const jwtToken = this.jwtService.sign({ id: user.id, role: user.role }, { secret: secertKey });
 
     return { token: jwtToken };

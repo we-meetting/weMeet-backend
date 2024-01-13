@@ -30,10 +30,7 @@ export class UsersService {
   }
 
   public async createUser({ name, email, password }: SignUpDto) {
-    return await this.prismaService.user.create({
-      data: { name, email, password },
-      select: this.selectOptions,
-    });
+    return await this.prismaService.user.create({ data: { name, email, password } });
   }
 
   public async findUserById(id: string) {

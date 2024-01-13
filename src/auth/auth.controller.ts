@@ -13,7 +13,8 @@ export class AuthController {
   @Post('register')
   @HttpCode(HttpStatus.CREATED)
   async signUp(@Body() singUpDto: SignUpDto) {
-    return await this.authService.signUp(singUpDto);
+    await this.authService.signUp(singUpDto);
+    return;
   }
 
   @Post('login')
