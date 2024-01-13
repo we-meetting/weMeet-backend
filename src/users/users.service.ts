@@ -30,34 +30,24 @@ export class UsersService {
   }
 
   public async createUser({ name, email, password }: SignUpDto) {
-    return await this.prismaService.user.create({
-      data: { name, email, password },
-      select: this.selectOptions,
-    });
+    return await this.prismaService.user.create({ data: { name, email, password } });
   }
 
-  public async findUserById(id: string) {
+  public async findById(id: string) {
     const user = await this.prismaService.user.findFirst({
       where: { id },
     });
     return { isExist: Boolean(user), user: user || null };
   }
 
-  public async updateUserName(id: User['id'], data: Partial<Pick<User, 'name'>>): Promise<boolean> {
-    const getUser = await this.prismaService.user.findUnique({ where: { id } });
-    if (!getUser) {
-      return false;
-    }
-    await this.prismaService.user.update({ data, where: { id } });
-    return true;
+  public async updateUser(
+    id: User['id'],
+    data: Partial<Omit<User, 'id' | 'createdAt' | 'updatedAt'>>,
+  ) {
+    return await this.prismaService.user.update({ where: { id }, data });
   }
 
-  public async deleteUser(id: User['id']): Promise<boolean> {
-    const getUser = await this.prismaService.user.findUnique({ where: { id } });
-    if (!getUser) {
-      return false;
-    }
-    await this.prismaService.user.delete({ where: { id } });
-    return true;
+  public async deleteUser(id: User['id']) {
+    return await this.prismaService.user.delete({ where: { id } });
   }
 }

@@ -6,18 +6,18 @@ import * as Joi from 'joi';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
-import { UserModule } from './user/users.module';
+import { UsersModule } from './users/users.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      envFilePath: process.env.NODE_ENV === 'dev' ? '.env.dev' : '.env',
+      envFilePath: process.env.NODE_ENV === 'prod' ? '.env' : '.env.local',
       validationSchema: Joi.object({
         DATABASE_URL: Joi.string().required(),
       }),
     }),
-    UserModule,
+    UsersModule,
     AuthModule,
   ],
   controllers: [AppController],
