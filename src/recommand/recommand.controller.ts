@@ -6,7 +6,7 @@ import { JwtAccessGuard, RoleGuard } from 'src/auth/guards';
 import { GenerateRecommandDto } from './dto';
 import { RecommandService } from './recommand.service';
 
-@Controller('todo')
+@Controller('recommand')
 export class RecommandController {
   constructor(private readonly recommandService: RecommandService) {}
 
