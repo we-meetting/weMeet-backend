@@ -49,7 +49,7 @@ export class RecommandService {
             content: 'Sure, I will follow all rules.',
           },
         ],
-        model: 'gpt-4',
+        model: 'gpt-3.5-turbo',
         n: 1,
       });
 
