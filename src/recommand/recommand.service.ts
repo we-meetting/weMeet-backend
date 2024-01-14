@@ -3,10 +3,10 @@ import { ConfigService } from '@nestjs/config';
 
 import OpenAI from 'openai';
 
-import { GenerateResponseDto } from './dto';
+import { GenerateRecommandDto } from './dto';
 
 @Injectable()
-export class TodoService {
+export class RecommandService {
   private readonly openai: OpenAI;
   private readonly messages: OpenAI.Chat.Completions.ChatCompletionMessageParam[];
 
@@ -16,7 +16,7 @@ export class TodoService {
     });
   }
 
-  private generateSystemContent(roleType: string) {
+  private systemContent(roleType: string) {
     return `요청은 지역에 대해서 올 것이고 너는 요청에 맞춰 근처에 추천하는 할 일이나 먹거리 장소를 추천해줘. 
       응답하기 전에 지켜야하는 규칙들이 몇 가지 있어.
   
@@ -31,13 +31,13 @@ export class TodoService {
       `;
   }
 
-  public async generateResponse({ city, district, region, isTodo }: GenerateResponseDto) {
+  public async generateRecommand({ city, district, region, isTodo }: GenerateRecommandDto) {
     try {
       const chatCompletion = await this.openai.chat.completions.create({
         messages: [
           {
             role: 'system',
-            content: this.generateSystemContent(isTodo ? '할 일' : '맛집'),
+            content: this.systemContent(isTodo ? '할 일' : '맛집'),
           },
           {
             role: 'user',

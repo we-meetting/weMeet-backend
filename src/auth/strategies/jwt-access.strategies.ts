@@ -2,7 +2,6 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { PassportStrategy } from '@nestjs/passport';
 
-import { request } from 'express';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 
 import { UsersService } from 'src/users/users.service';
@@ -21,7 +20,6 @@ export class JwtAccessStrategy extends PassportStrategy(Strategy, 'jwt-access') 
   }
 
   async validate(payload: { sub: string }) {
-    console.log(request.cookies, 'cookie');
     const { isExist, user } = await this.usersService.findById(payload.sub);
     if (!isExist) throw new UnauthorizedException('사용자 정보를 불러오는데 실패했어요');
 

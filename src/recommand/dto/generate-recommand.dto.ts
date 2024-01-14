@@ -1,6 +1,6 @@
 import { IsBoolean, IsNotEmpty, IsString } from 'class-validator';
 
-export class GenerateResponseDto {
+export class GenerateRecommandDto {
   @IsNotEmpty({ message: '도시 이름은 필수 입력 값이에요' })
   @IsString({ message: '올바른 도시 이름을 입력해주세요' })
   city: string;
