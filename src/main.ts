@@ -18,6 +18,14 @@ dotenv.config({
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
+  app.enableCors({
+    origin: [
+      // process.env.NODE_ENV === 'production' ? 'https://hanseithon.com' : 'http://localhost:3000',
+      'http://localhost:3000',
+    ],
+    credentials: true,
+  });
+
   app.enableShutdownHooks();
   app.useGlobalFilters(new HttpExceptionFilter());
   app.useGlobalInterceptors(new ResponseInterceptor());
@@ -26,6 +34,6 @@ async function bootstrap() {
   app.use(requestIp.mw());
   app.use(cookieParser());
 
-  await app.listen(3000);
+  await app.listen(4000, '0.0.0.0');
 }
 bootstrap();

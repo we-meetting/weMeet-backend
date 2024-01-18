@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+  web:
+    build: .
+    ports:
+      - 4000:4000
+    volumes:
+      - .:/app
+      - /app/node_modules
+    env_file:
+      - ./.env
+    depends_on:
+      - mysql
+    restart: none
+
+  mysql:
+    image: mysql:8.0
+    ports:
+      - 3306:3306
+    volumes:
+      - mysql:/var/lib/mysql
+    environment:
+      MYSQL_DB: wemeet
+      MYSQL_USER: choi138
+      MYSQL_PASSWORD: wemeet1234
+      MYSQL_ROOT_PASSWORD: wemeet1234
+      TZ: Asia/Seoul
+    restart: always
+
+volumes:
+  mysql:

@@ -1,7 +1,7 @@
 {
   "name": "we-meet-backend",
   "repository": "https://github.com/we-meetting",
-  "version": "0.0.1",
+  "version": "1.0.2",
   "description": "",
   "author": "GeunWon Choi <kidjustinchoi@gmail.com>",
   "private": true,
@@ -39,6 +39,7 @@
     "dotenv": "^16.3.1",
     "joi": "^17.11.0",
     "openai": "^4.24.7",
+    "passport": "^0.7.0",
     "passport-jwt": "^4.0.1",
     "passport-local": "^1.0.0",
     "reflect-metadata": "^0.1.13",
@@ -106,6 +107,5 @@
     "**/*.prisma": [
       "prisma format"
     ]
-  },
-  "main": "index.js"
+  }
 }

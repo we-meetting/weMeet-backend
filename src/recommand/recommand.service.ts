@@ -8,7 +8,6 @@ import { GenerateRecommandDto } from './dto';
 @Injectable()
 export class RecommandService {
   private readonly openai: OpenAI;
-  private readonly messages: OpenAI.Chat.Completions.ChatCompletionMessageParam[];
 
   constructor(private configService: ConfigService) {
     this.openai = new OpenAI({
