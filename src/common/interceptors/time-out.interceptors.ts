@@ -16,7 +16,7 @@ export const TimeoutInterceptor = (timeouts: number) => {
         timeout(timeouts),
         catchError((err) => {
           if (err instanceof TimeoutError) {
-            return throwError(() => new RequestTimeoutException());
+            return throwError(() => new RequestTimeoutException('요청 시간이 초과되었어요.'));
           }
           return throwError(() => err);
         }),
