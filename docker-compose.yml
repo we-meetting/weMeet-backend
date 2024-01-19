@@ -12,7 +12,7 @@ services:
       - ./.env
     depends_on:
       - mysql
-    restart: none
+    restart: always
 
   mysql:
     image: mysql:8.0
