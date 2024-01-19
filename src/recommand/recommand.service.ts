@@ -12,6 +12,7 @@ export class RecommandService {
   constructor(private configService: ConfigService) {
     this.openai = new OpenAI({
       apiKey: this.configService.get<string>('OPEN_AI_SECRET_KEY'),
+      timeout: 1000 * 60 * 30,
     });
   }
 
@@ -23,7 +24,7 @@ export class RecommandService {
       2. 장소 이름 앞에 숫자를 적어줘
       3. 구체적인 장소와 구체적인 위치만 명시하고 추가적인 설명을 붙이지마
       4. 단순히 ${roleType}만 답변하고 서론이나 결론은 답변하지마
-      5. 딱 10개의 결과를 답변해
+      5. 딱 28개의 결과를 답변해
       6. JSON 형식은 {"${roleType} 숫자": {이름: ${roleType}이름, 위치: ${roleType} 구체적인 위치 (예시: 서울특별시 마포구 서교동 332-4)}} 이렇게 답변해
       `;
   }
