@@ -19,17 +19,4 @@ COPY --chown=node:node . .
 RUN npx prisma generate
 RUN pnpm build
 
-USER node
-
-########################################
-
-FROM base 
-
-WORKDIR /app
-
-COPY --chown=node:node --from=build /app/node_modules ./node_modules
-COPY --chown=node:node --from=build /app/dist ./dist
-COPY --chown=node:node --from=build /app/package.json /app/pnpm-lock.yaml ./
-COPY --chown=node:node --from=build /app/.env ./.env
-
 CMD ["pnpm", "start:prod"]
