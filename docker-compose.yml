@@ -21,7 +21,7 @@ services:
     volumes:
       - mysql:/var/lib/mysql
     environment:
-      MYSQL_DB: wemeet
+      MYSQL_DATABASE: wemeet
       MYSQL_USER: choi138
       MYSQL_PASSWORD: wemeet1234
       MYSQL_ROOT_PASSWORD: wemeet1234
