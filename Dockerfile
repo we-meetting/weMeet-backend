@@ -19,4 +19,4 @@ COPY --chown=node:node . .
 RUN npx prisma generate
 RUN pnpm build
 
-CMD ["pnpm", "start:prod"]
+CMD sh -c "npx prisma migrate deploy && pnpm start:prod"
