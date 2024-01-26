@@ -3,16 +3,16 @@ import { ConfigService } from '@nestjs/config';
 
 import axios from 'axios';
 
-import { GetRestuarantsDto } from './dto';
+import { SearchDto } from './dto';
 
 @Injectable()
-export class RestaurantsService {
+export class SearchService {
   private readonly naverApiUrl: string;
   constructor(private readonly configService: ConfigService) {
     this.naverApiUrl = 'https://openapi.naver.com/v1';
   }
 
-  public async searchRestaurants({ name }: GetRestuarantsDto) {
+  public async search({ name }: SearchDto) {
     try {
       const { data: localData } = await axios.get(`${this.naverApiUrl}/search/local.json`, {
         params: {

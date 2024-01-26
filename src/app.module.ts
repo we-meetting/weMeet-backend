@@ -4,8 +4,8 @@ import { ConfigModule } from '@nestjs/config';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
-import { RecommandModule } from './recommand/recommand.module';
-import { RestaurantsModule } from './restaurants/restaurants.module';
+import { RecommendModule } from './recommend/recommend.module';
+import { SearchModule } from './search/search.module';
 import { UsersModule } from './users/users.module';
 
 @Module({
@@ -16,8 +16,8 @@ import { UsersModule } from './users/users.module';
     }),
     UsersModule,
     AuthModule,
-    RecommandModule,
-    RestaurantsModule,
+    RecommendModule,
+    SearchModule,
   ],
   controllers: [AppController],
   providers: [AppService],
