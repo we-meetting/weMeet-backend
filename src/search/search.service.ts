@@ -1,4 +1,4 @@
-import { Injectable, InternalServerErrorException } from '@nestjs/common';
+import { HttpException, Injectable, InternalServerErrorException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 
 import axios from 'axios';
@@ -44,8 +44,12 @@ export class SearchService {
 
       return results;
     } catch (error) {
-      console.log(error);
-      throw new InternalServerErrorException('서버에 문제가 발생했어요');
+      if (error.response.status == 429) {
+        throw new HttpException('요청이 너무 빨라요', 429);
+      } else {
+        console.log(error);
+        throw new InternalServerErrorException('서버에 문제가 발생했어요');
+      }
     }
   }
 }
