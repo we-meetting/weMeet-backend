@@ -68,7 +68,7 @@ export class AuthService {
       accessToken,
       refreshToken,
       refreshCookieOption: {
-        domain: isProduction ? 'localhost' : 'localhost', // 특정 도메인에서만 쿠키를 전송하도록 설정
+        domain: isProduction ? 'wemtmt.com' : 'localhost', // 특정 도메인에서만 쿠키를 전송하도록 설정
         maxAge: 60 * 60 * 24 * 1000, // 24시간 후 만료
         httpOnly: true, // 자바스크립트에서 쿠키에 접근하지 못하도록 설정
         secure: isProduction, // production이면 https만 허용

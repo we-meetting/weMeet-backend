@@ -19,11 +19,7 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
   app.enableCors({
-    origin: [
-      // process.env.NODE_ENV === 'production' ? 'https://hanseithon.com' : 'http://localhost:3000',
-      'http://localhost:5173',
-      'http://172.30.1.66:5173',
-    ],
+    origin: [process.env.NODE_ENV === 'prod' ? 'https://wemtmt.com/' : 'http://localhost:5173'],
     credentials: true,
   });
 

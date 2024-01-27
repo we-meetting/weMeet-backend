@@ -2,17 +2,13 @@ version: '3.8'
 
 services:
   web:
-    build: .
+    image: ghcr.io/we-meetting/wemeet-backend:latest
     ports:
       - 4000:4000
-    volumes:
-      - .:/app
-      - /app/node_modules
     env_file:
       - ./.env
     depends_on:
       - mysql
-    restart: always
 
   mysql:
     image: mysql:8.0
@@ -27,6 +23,9 @@ services:
       MYSQL_ROOT_PASSWORD: wemeet1234
       TZ: Asia/Seoul
     restart: always
+
+networks:
+  app-network:
 
 volumes:
   mysql:
