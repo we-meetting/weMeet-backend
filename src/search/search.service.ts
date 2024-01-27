@@ -12,7 +12,7 @@ export class SearchService {
     this.naverApiUrl = 'https://openapi.naver.com/v1';
   }
 
-  public async search({ name }: SearchDto) {
+  public async search({ keyword: name }: SearchDto) {
     try {
       const { data: localData } = await axios.get(`${this.naverApiUrl}/search/local.json`, {
         params: {

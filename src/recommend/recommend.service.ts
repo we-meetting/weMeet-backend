@@ -48,14 +48,14 @@ export class RecommendService {
             content: 'Sure, I will follow all rules.',
           },
         ],
-        model: 'gpt-4',
+        model: 'gpt-3.5-turbo',
         n: 1,
       });
 
       return chatCompletion.choices[0].message.content;
     } catch (error) {
       console.log(error);
-      throw new InternalServerErrorException('서버에 문제가 생겼어요.');
+      throw new InternalServerErrorException('서버에 문제가 생겼어요');
     }
   }
 }

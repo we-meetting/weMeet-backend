@@ -11,7 +11,7 @@ export class SearchController {
 
   @Get('/')
   @UseInterceptors(TimeoutInterceptor(1000 * 60 * 30))
-  public async search(@Query() { name }: SearchDto) {
-    return await this.searchService.search({ name });
+  public async search(@Query() { keyword }: SearchDto) {
+    return await this.searchService.search({ keyword });
   }
 }
